@@ -1,8 +1,10 @@
 package com.simpleapp.simpleapplication.service;
 
-import com.simpleapp.simpleapplication.entity.Product;
+import com.simpleapp.simpleapplication.entity.ProductEntity;
 import com.simpleapp.simpleapplication.exception.NotFoundException;
+import com.simpleapp.simpleapplication.model.Product;
 import com.simpleapp.simpleapplication.repository.ProductRepository;
+import com.simpleapp.simpleapplication.utils.ConverterUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,12 +33,13 @@ public class ProductService {
     }
 
     public Product save(Product product) {
-       return productRepository.save(product);
+       return ConverterUtils.convert(productRepository.save(ConverterUtils.convert(product)));
     }
 
     public Product findById(int id) {
-        return productRepository.findById(id)
+        ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id));
+        return ConverterUtils.convert(productEntity);
     }
 
     public void delete(int id) {
@@ -44,7 +47,10 @@ public class ProductService {
     }
 
     public Page<Product> getProducts(String name, Pageable pageable) {
-        return name == null ? productRepository.findAll(pageable) : productRepository.findByName(name, pageable);
+        Page<ProductEntity> productPage = name == null ? productRepository.findAll(pageable) :
+                productRepository.findByName(name, pageable);
+        productPage.map(ConverterUtils::convert);
+        return productPage.map(ConverterUtils::convert);
     }
 
 }

@@ -1,20 +1,22 @@
 package com.simpleapp.simpleapplication.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
-@Entity
-@Table(name = "product")
 @Data
 @NoArgsConstructor
-public class Product implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    protected int id;
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(
+        name = "product",
+        indexes = {
+                @Index(name = "name_index", columnList = "name")
+        }
+)
+public class ProductEntity extends BaseEntity {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;

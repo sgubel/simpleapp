@@ -1,6 +1,7 @@
 package com.simpleapp.simpleapplication;
 
-import com.simpleapp.simpleapplication.entity.Product;
+import com.simpleapp.simpleapplication.entity.ProductEntity;
+import com.simpleapp.simpleapplication.model.Product;
 import com.simpleapp.simpleapplication.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

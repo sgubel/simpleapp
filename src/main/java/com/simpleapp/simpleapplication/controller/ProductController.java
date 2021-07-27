@@ -1,8 +1,9 @@
 package com.simpleapp.simpleapplication.controller;
 
-import com.simpleapp.simpleapplication.entity.Product;
-import com.simpleapp.simpleapplication.model.ProductForm;
+import com.simpleapp.simpleapplication.model.Product;
+import com.simpleapp.simpleapplication.model.form.ProductForm;
 import com.simpleapp.simpleapplication.service.ProductService;
+import com.simpleapp.simpleapplication.utils.ConverterUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ProductForm form) {
-        Product createdProduct = productService.create(formToProduct(form));
+        Product createdProduct = productService.create(ConverterUtils.convert(form));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdProduct.getId()).toUri();
@@ -32,7 +33,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable int id, @RequestBody ProductForm form) {
-        return ResponseEntity.ok().body(productService.update(id, formToProduct(form)));
+        return ResponseEntity.ok().body(productService.update(id, ConverterUtils.convert(form)));
     }
 
     @GetMapping("/{id}")
@@ -52,15 +53,4 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getProducts(name, pageable));
     }
 
-    //----------------------------------------------------------------------------------------------------
-
-    private Product formToProduct(ProductForm form) {
-        Product product = new Product();
-        product.setName(form.getName());
-        product.setDescription(form.getDescription());
-        product.setPrice(form.getPrice());
-        product.setWeight(form.getWeight());
-        product.setCountry(form.getCountry());
-        return product;
-    }
 }
